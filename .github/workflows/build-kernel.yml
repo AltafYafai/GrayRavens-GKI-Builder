@@ -31,7 +31,7 @@ on:
       kernel_repo:
         description: 'Kernel repository (owner/repo) to build'
         type: string
-        default: XTENSEI/kernel_common_5.10
+        default: AltafYafai/kernel_common_5.10
       susfs_branch:
         description: 'SUSFS kernel patch branch (gki-android12-5.10 / gki-android13-5.15 ...)'
         type: string
@@ -141,7 +141,7 @@ jobs:
 
       - name: Shallow-clone kernel source
         run: |
-          git clone --depth=1 --branch "${{ inputs.kernel_ref }}" "https://github.com/${{ inputs.kernel_repo }}" kernel
+          git -c http.extraheader="" clone --depth=1 --branch "${{ inputs.kernel_ref }}" "https://github.com/${{ inputs.kernel_repo }}" kernel
 
       - name: Notify kernel cloned
         env:
@@ -436,7 +436,7 @@ jobs:
         run: |
           ZIP_NAME="${{ inputs.kernel_name }}-${{ matrix.ksu }}-${{ matrix.clang }}"
           echo "ZIP_NAME=$ZIP_NAME" >> "$GITHUB_ENV"
-          git clone --depth=1 --branch ${{ inputs.anykernel_branch }} https://github.com/XTENSEI/GrayRavens-anykernel anykernel
+          git -c http.extraheader="" clone --depth=1 --branch ${{ inputs.anykernel_branch }} https://github.com/AltafYafai/GrayRavens-anykernel anykernel
           cp kernel/out/arch/arm64/boot/Image anykernel/Image
           cd anykernel
           zip -r9 "../${ZIP_NAME}.zip" . --exclude="*.git*" --exclude="README.md" --exclude="*.placeholder"
