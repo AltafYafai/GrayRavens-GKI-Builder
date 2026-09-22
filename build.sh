@@ -26,25 +26,9 @@ echo "CLANG_VARIANT : '${CLANG_VARIANT}'"
 echo "Toolchain path : $CLANG_PATH"
 echo "Clang version  : $("$CLANG_PATH/bin/clang" --version | head -n1)"
 
-# ── Polly availability check ─────────────────────────────────────────────────
-POLLY_FLAGS=""
-if "$CLANG_PATH/bin/clang" -mllvm -polly -x c /dev/null -o /dev/null 2>/dev/null; then
-    echo "Polly : available — enabling loop optimizations"
-    POLLY_FLAGS="-mllvm -polly \
- -mllvm -polly-run-dce \
- -mllvm -polly-run-inliner \
- -mllvm -polly-reschedule=1 \
- -mllvm -polly-loopfusion-greedy=1 \
- -mllvm -polly-vectorizer=stripmine \
- -mllvm -polly-detect-keep-going"
-else
-    echo "Polly : not available in this toolchain — skipping"
-fi
-
 # ── KCFLAGS ──────────────────────────────────────────────────────────────────
-export KCFLAGS="-w -march=armv8.2-a+crypto+fp16+dotprod -mtune=cortex-a55 \
-  -fno-semantic-interposition \
-  ${POLLY_FLAGS}"
+export KCFLAGS="-w -march=armv8.2-a+crypto+fp16+dotprod -mtune=cortex-a78 \
+  -fno-semantic-interposition"
 
 # ── SELinux policy injection ─────────────────────────────────────────────────
 if [ -f "selinux.sh" ]; then
@@ -91,7 +75,7 @@ else
     echo "No ThinLTO cache found"
 fi
 
-echo "--- Polly flags used ---"
+echo "--- KCFLAGS used ---"
 echo "KCFLAGS: $KCFLAGS"
 
 echo "--- Kernel compile.h ---"
