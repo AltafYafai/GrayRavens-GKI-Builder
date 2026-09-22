@@ -27,8 +27,8 @@ echo "Toolchain path : $CLANG_PATH"
 echo "Clang version  : $("$CLANG_PATH/bin/clang" --version | head -n1)"
 
 # ── KCFLAGS ──────────────────────────────────────────────────────────────────
-export KCFLAGS="-w -march=armv8.2-a+crypto+fp16+dotprod -mtune=cortex-a78 \
-  -fno-semantic-interposition"
+export KCFLAGS="-w -fno-semantic-interposition"
+
 
 # ── SELinux policy injection ─────────────────────────────────────────────────
 if [ -f "selinux.sh" ]; then
